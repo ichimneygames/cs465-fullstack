@@ -9,9 +9,10 @@ router
     .route('/trips')
     .get(tripsController.tripsList); // GET method routes triplist
 
-// Get method routes tripsFindByCode - requires parameter
+// Get and update a single trip by code
 router
     .route('/trips/:tripCode')
-    .get(tripsController.tripsFindByCode);
+    .get(tripsController.tripsFindByCode)
+    .put(tripsController.tripsUpdate);
 
 module.exports = router;

@@ -43,7 +43,7 @@ const tripsFindByCode = async (req, res) => {
     { // database returned no data
         return res
                 .status(404)
-                .json(err);
+                .json({ message: 'Trip not found' });
     } else { //return resulting trip list
         return res
             .status(200)
@@ -52,7 +52,29 @@ const tripsFindByCode = async (req, res) => {
 
 };
 
+const tripsUpdate = async (req, res) => {
+    const update = req.body;
+    const tripCode = req.params.tripCode;
+
+    try {
+        const q = await Model.findOneAndUpdate(
+            { code: tripCode },
+            update,
+            { new: true, runValidators: true }
+        ).exec();
+
+        if (!q) {
+            return res.status(404).json({ message: 'Trip not found' });
+        }
+
+        return res.status(200).json(q);
+    } catch (err) {
+        return res.status(400).json({ message: 'Update failed', error: err });
+    }
+};
+
 module.exports = {
     tripsList,
-    tripsFindByCode
+    tripsFindByCode,
+    tripsUpdate
 };
